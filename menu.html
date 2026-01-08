@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<title>MENU</title>
+
+
+<style>
+body{
+  margin:0;
+  min-height:100vh;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  background:#fff8f0;
+  font-family:'Picnic', sans-serif;
+}
+
+#menu{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:20px;
+}
+
+.case{
+  width:180px;
+  height:120px;
+  border-radius:30px;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  font-size:24px;
+  color:white;
+  cursor:pointer;
+  transition:.3s;
+}
+
+.case:hover{transform:scale(1.05);}
+.case.disabled{
+  opacity:.3;
+  pointer-events:none;
+}
+
+.q1{background:#e63946;}
+.q2{background:#f1fa3c;color:#000;}
+.q3{background:#457b9d;}
+.q4{background:#e76f51;}
+.q5{background:#ffbe0b;color:#000;}
+.q6{background:#1d3557;}
+
+
+#iconeCadenas{
+  position:fixed;
+  bottom:25px;
+  left:50%;
+  transform:translateX(-50%);
+  font-size:48px;
+  color:#000;
+  opacity:0.6;
+  pointer-events:none;
+}
+
+
+#quiz {
+    display: none;
+    padding: 35px;
+    border-radius: 25px;
+    text-align: center;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.25);
+    background-color: #eaf4f8;
+    background-image:
+      repeating-linear-gradient(
+        0deg,
+        rgba(168,218,220,0.6) 0px,
+        rgba(168,218,220,0.6) 4px,
+        transparent 4px,
+        transparent 80px
+      ),
+      repeating-linear-gradient(
+        90deg,
+        rgba(168,218,220,0.6) 0px,
+        rgba(168,218,220,0.6) 4px,
+        transparent 4px,
+        transparent 80px
+      );
+}
+
+#reponse {
+  width: 90%;
+  padding: 18px;
+  font-size: 24px;
+  margin: 20px 0;
+  border-radius: 12px;
+  border: 2px solid #ccc; 
+  text-align: center;
+}
+
+button {
+  padding: 18px 28px;
+  font-size: 22px;
+  cursor: pointer;
+  border-radius: 12px;
+  background-color: #0040ff;
+  color: #fff;
+  border: none;
+  transition: background 0.3s ease, transform 0.2s ease;
+}
+
+button:hover {
+  background-color: #002fff;
+  transform: scale(1.05);
+}
+
+#msg{margin-top:15px;color:#e63946;}
+
+
+.roueBloc {
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+   color:black;
+}
+
+.roue {
+  width:50px;
+  height:60px;
+  border:2px solid #ccc;
+  border-radius:10px;
+  font-size:32px;
+  line-height:60px;
+  text-align:center;
+  font-family:monospace;
+  user-select:none;
+}
+
+.fleche {
+  background:none;
+  border:none;
+  color:black;
+  font-size:18px;
+  cursor:pointer;
+  padding:2px 5px;
+  user-select:none;
+}
+.fleche:hover {
+  transform:scale(1.2);
+}
+</style>
+</head>
+
+<body>
+
+
+<div id="menu">
+  <div class="case q1" onclick="lancerQuiz(1)">1</div>
+  <div class="case q2" onclick="lancerQuiz(2)">2</div>
+  <div class="case q3" onclick="lancerQuiz(3)">3</div>
+  <div class="case q4" onclick="lancerQuiz(4)">4</div>
+  <div class="case q5" onclick="lancerQuiz(5)">5</div>
+  <div class="case q6" onclick="lancerQuiz(6)">6</div>
+</div>
+
+<div id="iconeCadenas">
+  <svg width="48" height="48" viewBox="0 0 24 24" fill="black">
+    <path d="M17 8h-1V6a4 4 0 00-8 0v2H7a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2V10a2 2 0 00-2-2zm-6 9.7V19a1 1 0 002 0v-1.3a2 2 0 10-2 0zM10 8V6a2 2 0 114 0v2h-4z"/>
+  </svg>
+</div>
+
+
+
+<div id="quiz">
+  <h2 id="question"></h2>
+  <input id="reponse" placeholder="Ta réponse">
+  <br>
+  <button onclick="verifier()">Valider</button>
+  <div id="msg"></div>
+</div>
+
+
+<div id="cadenas" style="display:none; text-align:center; margin-top:20px;">
+  <div style="display:flex; justify-content:center; gap:10px;">
+  
+    <div class="roueBloc">
+      <button class="fleche" onclick="changerChiffre(0,-1)">▲</button>
+      <div class="roue" id="r0">0</div>
+      <button class="fleche" onclick="changerChiffre(0,1)">▼</button>
+    </div>
+    <div class="roueBloc">
+      <button class="fleche" onclick="changerChiffre(1,-1)">▲</button>
+      <div class="roue" id="r1">0</div>
+      <button class="fleche" onclick="changerChiffre(1,1)">▼</button>
+    </div>
+    <div class="roueBloc">
+      <button class="fleche" onclick="changerChiffre(2,-1)">▲</button>
+      <div class="roue" id="r2">0</div>
+      <button class="fleche" onclick="changerChiffre(2,1)">▼</button>
+    </div>
+    <div class="roueBloc">
+      <button class="fleche" onclick="changerChiffre(3,-1)">▲</button>
+      <div class="roue" id="r3">0</div>
+      <button class="fleche" onclick="changerChiffre(3,1)">▼</button>
+    </div>
+    <div class="roueBloc">
+      <button class="fleche" onclick="changerChiffre(4,-1)">▲</button>
+      <div class="roue" id="r4">0</div>
+      <button class="fleche" onclick="changerChiffre(4,1)">▼</button>
+    </div>
+    <div class="roueBloc">
+      <button class="fleche" onclick="changerChiffre(5,-1)">▲</button>
+      <div class="roue" id="r5">0</div>
+      <button class="fleche" onclick="changerChiffre(5,1)">▼</button>
+    </div>
+  </div>
+</div>
+
+
+<img
+  id="illustration"
+  src="fin.png"
+  style="
+    display:none;
+    position:fixed;
+    top:50%;
+    left:50%;
+    transform:translate(-50%, -50%);
+    width:100%;
+    height:100%;
+    object-fit:contain;
+    z-index:-1;
+    animation: apparition 1s ease forwards;
+  "
+>
+
+<audio id="sonClic" src="clic.mp3"></audio>
+<audio id="sonErreur" src="erreur.mp3"></audio>
+<audio id="sonSucces" src="sucess.mp3"></audio>
+<audio id="sonTouche" src="touche.mp3"></audio>
+
+<script>
+
+let quizActuel = null;
+let etape = 0;
+
+const questions = {
+  1:{q:"Quel est le dernier chiffre de l'extincteur ?", r:["8"]},
+  2:{
+    q:[
+      "Quel est le nombre d’étudiant·es en troisème année inscrit·es sur la liste de l’atelier ?",
+      "Additionne le résultat précédent ?"
+    ],
+    r:["14","5"]
+  },
+  3:{q:"Combien de porte contient la pièce à droite du dernier sigle ?", r:["3"]},
+  4:{q:"Quel est le prix d'une compote ?", r:["1"]},
+  5:{q:"Combien de salle contient la gallerie ", r:["3"]},
+  6:{q:"Combien de colonnes il y a-t-il dans la pièce derrière le dernier sigle ?", r:["7"]}
+};
+
+function lancerQuiz(n){
+  quizActuel = n;
+  etape = 0;
+  document.getElementById("menu").style.display="none";
+  document.getElementById("quiz").style.display="block";
+  document.getElementById("iconeCadenas").style.display="none"; 
+  afficherQuestion();
+}
+
+function afficherQuestion(){
+  const q = questions[quizActuel];
+  document.getElementById("question").textContent =
+    Array.isArray(q.q) ? q.q[etape] : q.q;
+  document.getElementById("reponse").value="";
+  document.getElementById("msg").textContent="";
+}
+
+function verifier(){
+  const r = document.getElementById("reponse").value.trim();
+  const q = questions[quizActuel];
+  const bonneReponse = Array.isArray(q.r) ? q.r[etape] : q.r[0];
+
+  if(r === bonneReponse){
+    etape++;
+    if(Array.isArray(q.q) && etape < q.q.length){
+      afficherQuestion();
+    }else{
+      document.getElementById("quiz").style.display="none";
+      document.querySelector(".q"+quizActuel).classList.add("disabled");
+
+      if(quizActuel === 6){
+        document.getElementById("menu").style.display="none";
+        document.getElementById("cadenas").style.display="block";
+      }else{
+        document.getElementById("menu").style.display="grid";
+        document.getElementById("iconeCadenas").style.display="block"; 
+      }
+    }
+  }else{
+    document.getElementById("msg").textContent="Essaie encore !";
+    document.getElementById("sonErreur").play();
+  }
+}
+
+
+const codeFinal = "853137";
+const rouesValeur = [0,0,0,0,0,0]; 
+
+function changerChiffre(i, dir){
+  rouesValeur[i] = (rouesValeur[i] + dir + 10) % 10; 
+  document.getElementById("r"+i).textContent = rouesValeur[i];
+  document.getElementById("sonClic").play();
+  verifierCadenas();
+}
+
+function verifierCadenas(){
+  if(rouesValeur.join('') === codeFinal){
+    document.getElementById("cadenas").style.display = "none";
+    document.getElementById("sonSucces").play();
+    document.getElementById("illustration").style.display = "block";
+  }
+}
+</script>
+
+</body>
+</html>
+

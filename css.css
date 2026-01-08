@@ -1,0 +1,22 @@
+@font-face {
+  font-family: 'Picnic';
+  src: url('PicNic-Regular.otf') format('opentype');
+}
+
+body {
+  font-family: 'Picnic', sans-serif;
+}
+
+@keyframes apparition {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+}
+
+
+
